@@ -7,10 +7,12 @@
     "url": "https://github.com/lumine-code/scrollmap-search-panel/issues"
   },
   "keywords": [
-    "scrollmap",
+    "overview-ruler",
+    "gutter",
+    "annotation",
+    "decoration",
     "find",
-    "search",
-    "marker"
+    "results"
   ],
   "version": "1.0.0",
   "license": "MIT",
