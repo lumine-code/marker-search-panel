@@ -27,7 +27,7 @@
   "consumedServices": {
     "search-panel": {
       "versions": {
-        "1.0.0": "consumeSearchPanel"
+        "^1.0.0": "consumeSearchPanel"
       }
     }
   },
