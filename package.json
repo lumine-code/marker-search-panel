@@ -1,7 +1,7 @@
 {
   "name": "scrollmap-search-panel",
   "author": "lumine-code",
-  "description": "Show search results on the scrollbar",
+  "description": "Show search results on the scrollbar.",
   "repository": "https://github.com/lumine-code/scrollmap-search-panel",
   "bugs": {
     "url": "https://github.com/lumine-code/scrollmap-search-panel/issues"

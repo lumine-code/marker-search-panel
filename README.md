@@ -1,6 +1,8 @@
 # scrollmap-search-panel
 
-Show search results on the scrollbar. A layer package for [scrollmap](https://github.com/lumine-code/scrollmap).
+Show search results on the scrollbar.
+
+A layer package for [scrollmap](https://github.com/lumine-code/scrollmap).
 
 ## Features
 
