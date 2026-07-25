@@ -56,7 +56,6 @@ describe("scrollmap-search-panel", () => {
 
   function emitUpdate() {
     service.emitter.emit("did-update");
-    advanceClock(60); // flush the consumer's 50 ms throttle
   }
 
   beforeEach(async () => {
@@ -79,8 +78,10 @@ describe("scrollmap-search-panel", () => {
 
   it("activates and provides a scrollmap layer descriptor", () => {
     expect(atom.packages.isPackageActive("scrollmap-search-panel")).toBe(true);
-    expect(provider.name).toBe("find");
+    expect(provider.name).toBe("search-panel");
     expect(typeof provider.description).toBe("string");
+    expect(provider.merge).toBe(true);
+    expect(provider.threshold).toBe("scrollmap-search-panel.threshold");
     expect(typeof provider.initialize).toBe("function");
     expect(typeof provider.getItems).toBe("function");
   });
@@ -115,16 +116,12 @@ describe("scrollmap-search-panel", () => {
     ]);
   });
 
-  it("sorts markers by row and merges adjacent ranges", () => {
+  it("returns raw ranges and leaves sorting and merging to the hub", () => {
     // Created out of document order on purpose.
     markResults(
       [
         [20, 0],
         [20, 5],
-      ],
-      [
-        [4, 0],
-        [4, 5],
       ],
       [
         [3, 0],
@@ -133,25 +130,9 @@ describe("scrollmap-search-panel", () => {
     );
     emitUpdate();
     expect(layer.items).toEqual([
-      { row: 3, end: 4 },
       { row: 20, end: 20 },
+      { row: 3, end: 3 },
     ]);
-  });
-
-  it("hides all markers when the item count exceeds the threshold", () => {
-    atom.config.set("scrollmap-search-panel.threshold", 1);
-    markResults(
-      [
-        [2, 0],
-        [2, 5],
-      ],
-      [
-        [10, 0],
-        [10, 5],
-      ],
-    );
-    emitUpdate();
-    expect(layer.items).toEqual([]);
   });
 
   it("clears the markers when the find panel closes and permanent is disabled", () => {
@@ -167,7 +148,6 @@ describe("scrollmap-search-panel", () => {
 
     service.visible = false;
     service.emitter.emit("did-change-find-visibility");
-    advanceClock(60);
     expect(layer.items).toEqual([]);
   });
 
@@ -184,12 +164,20 @@ describe("scrollmap-search-panel", () => {
     expect(layer.items).toEqual([]);
   });
 
-  it("stops updating the layer once the consumer is disposed", () => {
+  it("clears the layers and stops updating once the consumer is disposed", () => {
+    markResults([
+      [2, 0],
+      [2, 5],
+    ]);
+    emitUpdate();
+    expect(layer.items.length).toBe(1);
+
     consumerDisposable.dispose();
     expect(mainModule.service).toBeNull();
+    expect(layer.items).toEqual([]);
+
     layer.update.calls.reset();
     service.emitter.emit("did-update");
-    advanceClock(60);
     expect(layer.update).not.toHaveBeenCalled();
   });
 });

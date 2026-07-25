@@ -20,14 +20,14 @@ To install `scrollmap-search-panel` search for _scrollmap-search-panel_ in the I
 The marker style can be adjusted in the `styles.less` file, e.g. change the marker color:
 
 ```less
-.scrollmap .marker.marker-find {
+.scrollmap .marker.marker-search-panel {
   background-color: var(--text-color-info);
 }
 ```
 
 ## Services
 
-- **scrollmap** (`1.0.0`): provided to render search result markers as a layer on the editor scrollbar.
+- **scrollmap** (`1.1.0`): provided to render search result markers as a layer on the editor scrollbar.
 - **search-panel** (`^1.0.0`): consumed to observe search updates, panel visibility, and the results marker layer of each editor.
 
 ## Contributing
