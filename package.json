@@ -1,23 +1,33 @@
 {
   "name": "scrollmap-search-panel",
-  "description": "Show search-panel results on the scrollbar",
-  "repository": "https://github.com/asiloisad/pulsar-scrollmap-search-panel",
+  "author": "lumine-code",
+  "description": "Show search results on the scrollbar",
+  "repository": "https://github.com/lumine-code/scrollmap-search-panel",
+  "bugs": {
+    "url": "https://github.com/lumine-code/scrollmap-search-panel/issues"
+  },
   "keywords": [
     "scrollmap",
     "find",
     "search",
     "marker"
   ],
-  "version": "0.3.2",
+  "version": "1.0.0",
   "license": "MIT",
   "engines": {
     "atom": ">=1.100.0 <2.0.0"
   },
   "main": "./lib/main",
+  "scripts": {
+    "test": "cd ../lumine && npm run test:only -- ../scrollmap-search-panel/spec",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
   "consumedServices": {
     "search-panel": {
       "versions": {
-        "0.0.1": "consumeSearchPanel"
+        "1.0.0": "consumeSearchPanel"
       }
     }
   },
@@ -28,20 +38,26 @@
       }
     }
   },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-n": "^18.2.2",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.6"
+  },
   "configSchema": {
     "threshold": {
-      "order": 1,
-      "type": "integer",
       "title": "Threshold",
       "description": "Hide markers if count exceeds this value. Zero means no limit.",
+      "type": "integer",
       "minimum": 0,
       "default": 0
     },
     "permanent": {
-      "order": 2,
-      "type": "boolean",
       "title": "Permanent view",
       "description": "Keep markers visible even when the find panel is closed.",
+      "type": "boolean",
       "default": true
     }
   }
