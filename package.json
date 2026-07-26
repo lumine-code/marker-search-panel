@@ -27,16 +27,16 @@
     "format:check": "prettier --check ."
   },
   "consumedServices": {
-    "search-panel": {
+    "search.control": {
       "versions": {
-        "^1.0.0": "consumeSearchPanel"
+        "^1.0.0": "consumeSearchControl"
       }
     }
   },
   "providedServices": {
-    "scrollmap": {
+    "scrollmap.layer": {
       "versions": {
-        "1.1.0": "provideScrollmap"
+        "1.0.0": "provideScrollmapLayer"
       }
     }
   },

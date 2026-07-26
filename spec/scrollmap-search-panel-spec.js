@@ -63,12 +63,12 @@ describe("scrollmap-search-panel", () => {
     jasmine.attachToDOM(workspaceElement);
     const pack = await atom.packages.activatePackage("scrollmap-search-panel");
     mainModule = pack.mainModule;
-    provider = mainModule.provideScrollmap();
+    provider = mainModule.provideScrollmapLayer();
     editor = await atom.workspace.open();
     editor.setText(Array(50).fill("hello world").join("\n"));
     layer = makeLayer(editor);
     service = makeFakeService();
-    consumerDisposable = mainModule.consumeSearchPanel(service);
+    consumerDisposable = mainModule.consumeSearchControl(service);
   });
 
   afterEach(() => {
@@ -86,11 +86,11 @@ describe("scrollmap-search-panel", () => {
     expect(typeof provider.getItems).toBe("function");
   });
 
-  it("matches the shape of the real search-panel service", async () => {
+  it("matches the shape of the real search.control service", async () => {
     const activation = atom.packages.activatePackage("search-panel");
     atom.commands.dispatch(workspaceElement, "search-panel:show");
     const searchPanel = await activation;
-    const realService = searchPanel.mainModule.provideService();
+    const realService = searchPanel.mainModule.provideSearchControl();
     expect(typeof realService.resultsMarkerLayerForTextEditor).toBe("function");
     expect(typeof realService.isFindVisible).toBe("function");
     expect(typeof realService.onDidUpdate).toBe("function");
