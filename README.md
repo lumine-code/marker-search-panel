@@ -27,8 +27,8 @@ The marker style can be adjusted in the `styles.less` file, e.g. change the mark
 
 ## Services
 
-- **scrollmap.layer** (`1.0.0`): provided to render search result markers as a layer on the editor scrollbar.
-- **search.control** (`^1.0.0`): consumed to observe search updates, panel visibility, and the results marker layer of each editor.
+- **[scrollmap.layer](https://lumine-code.github.io/docs.html#services/scrollmap.layer)** (`1.0.0`): provided to render search result markers as a layer on the editor scrollbar.
+- **[search.control](https://lumine-code.github.io/docs.html#services/search.control)** (`^1.0.0`): consumed to observe search updates, panel visibility, and the results marker layer of each editor.
 
 ## Contributing
 
