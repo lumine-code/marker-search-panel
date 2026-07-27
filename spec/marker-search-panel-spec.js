@@ -1,13 +1,14 @@
 const { CompositeDisposable, Emitter } = require("atom");
 
-describe("scrollmap-search-panel", () => {
+describe("marker-search-panel", () => {
   let workspaceElement, editor, mainModule, provider, layer, service, consumerDisposable;
 
-  // Minimal stand-in for the layer object the scrollmap hub passes to
-  // `initialize` and `getItems` (see lumine-code/scrollmap lib/layer.js).
+  // Minimal stand-in for the layer object a renderer passes to `initialize` and
+  // `getItems` (see @lumine-code/marker-host lib/index.js).
   function makeLayer(targetEditor) {
     const fake = {
       editor: targetEditor,
+      props: provider,
       cache: new Map(),
       items: [],
       disposables: new CompositeDisposable(),
@@ -19,7 +20,6 @@ describe("scrollmap-search-panel", () => {
       }
     });
     fake.updateSync = fake.update;
-    fake.refresh = () => {};
     if (provider.initialize) {
       provider.initialize(fake);
     }
@@ -61,9 +61,9 @@ describe("scrollmap-search-panel", () => {
   beforeEach(async () => {
     workspaceElement = atom.views.getView(atom.workspace);
     jasmine.attachToDOM(workspaceElement);
-    const pack = await atom.packages.activatePackage("scrollmap-search-panel");
+    const pack = await atom.packages.activatePackage("marker-search-panel");
     mainModule = pack.mainModule;
-    provider = mainModule.provideScrollmapLayer();
+    provider = mainModule.provideMarkerLayer();
     editor = await atom.workspace.open();
     editor.setText(Array(50).fill("hello world").join("\n"));
     layer = makeLayer(editor);
@@ -76,12 +76,12 @@ describe("scrollmap-search-panel", () => {
     layer.disposables.dispose();
   });
 
-  it("activates and provides a scrollmap layer descriptor", () => {
-    expect(atom.packages.isPackageActive("scrollmap-search-panel")).toBe(true);
+  it("activates and provides a marker layer descriptor", () => {
+    expect(atom.packages.isPackageActive("marker-search-panel")).toBe(true);
     expect(provider.name).toBe("search-panel");
     expect(typeof provider.description).toBe("string");
     expect(provider.merge).toBe(true);
-    expect(provider.threshold).toBe("scrollmap-search-panel.threshold");
+    expect(provider.threshold).toBe("marker-search-panel.threshold");
     expect(typeof provider.initialize).toBe("function");
     expect(typeof provider.getItems).toBe("function");
   });
@@ -116,7 +116,30 @@ describe("scrollmap-search-panel", () => {
     ]);
   });
 
-  it("returns raw ranges and leaves sorting and merging to the hub", () => {
+  it("pushes to every layer attached to the same editor", () => {
+    // Both renderers attach a layer of their own for one editor; a provider
+    // holding a single layer per editor would leave the first one dark.
+    const second = makeLayer(editor);
+    markResults([
+      [2, 0],
+      [2, 5],
+    ]);
+    emitUpdate();
+
+    expect(layer.update).toHaveBeenCalled();
+    expect(second.update).toHaveBeenCalled();
+    expect(layer.items).toEqual([{ row: 2, end: 2 }]);
+    expect(second.items).toEqual([{ row: 2, end: 2 }]);
+
+    second.disposables.dispose();
+    layer.update.calls.reset();
+    second.update.calls.reset();
+    emitUpdate();
+    expect(layer.update).toHaveBeenCalled();
+    expect(second.update).not.toHaveBeenCalled();
+  });
+
+  it("returns raw ranges and leaves sorting and merging to the host", () => {
     // Created out of document order on purpose.
     markResults(
       [
@@ -136,7 +159,7 @@ describe("scrollmap-search-panel", () => {
   });
 
   it("clears the markers when the find panel closes and permanent is disabled", () => {
-    atom.config.set("scrollmap-search-panel.permanent", false);
+    atom.config.set("marker-search-panel.permanent", false);
     markResults([
       [2, 0],
       [2, 5],
