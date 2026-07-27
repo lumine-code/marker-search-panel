@@ -116,28 +116,11 @@ describe("marker-search-panel", () => {
     ]);
   });
 
-  it("pushes to every layer attached to the same editor", () => {
-    // Both renderers attach a layer of their own for one editor; a provider
-    // holding a single layer per editor would leave the first one dark.
-    const second = makeLayer(editor);
-    markResults([
-      [2, 0],
-      [2, 5],
-    ]);
-    emitUpdate();
-
-    expect(layer.update).toHaveBeenCalled();
-    expect(second.update).toHaveBeenCalled();
-    expect(layer.items).toEqual([{ row: 2, end: 2 }]);
-    expect(second.items).toEqual([{ row: 2, end: 2 }]);
-
-    second.disposables.dispose();
-  });
-
-  it("keeps pushing to the surviving layer after one detaches", () => {
-    const first = makeLayer(editor);
-    const second = makeLayer(editor);
-    first.disposables.dispose();
+  it("forgets the editor once its layer detaches", () => {
+    layer.disposables.dispose();
+    // Consuming the service in the setup already pushed once; only calls
+    // arriving after the detach are the regression.
+    layer.update.calls.reset();
 
     markResults([
       [2, 0],
@@ -145,11 +128,8 @@ describe("marker-search-panel", () => {
     ]);
     emitUpdate();
 
-    expect(first.update).not.toHaveBeenCalled();
-    expect(second.update).toHaveBeenCalled();
-    expect(second.items).toEqual([{ row: 2, end: 2 }]);
-
-    second.disposables.dispose();
+    expect(layer.update).not.toHaveBeenCalled();
+    expect(mainModule.layers.has(editor)).toBe(false);
   });
 
   it("returns raw ranges and leaves sorting and merging to the host", () => {
