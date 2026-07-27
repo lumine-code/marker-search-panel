@@ -132,11 +132,24 @@ describe("marker-search-panel", () => {
     expect(second.items).toEqual([{ row: 2, end: 2 }]);
 
     second.disposables.dispose();
-    layer.update.calls.reset();
-    second.update.calls.reset();
+  });
+
+  it("keeps pushing to the surviving layer after one detaches", () => {
+    const first = makeLayer(editor);
+    const second = makeLayer(editor);
+    first.disposables.dispose();
+
+    markResults([
+      [2, 0],
+      [2, 5],
+    ]);
     emitUpdate();
-    expect(layer.update).toHaveBeenCalled();
-    expect(second.update).not.toHaveBeenCalled();
+
+    expect(first.update).not.toHaveBeenCalled();
+    expect(second.update).toHaveBeenCalled();
+    expect(second.items).toEqual([{ row: 2, end: 2 }]);
+
+    second.disposables.dispose();
   });
 
   it("returns raw ranges and leaves sorting and merging to the host", () => {
