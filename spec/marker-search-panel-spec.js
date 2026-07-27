@@ -4,7 +4,7 @@ describe("marker-search-panel", () => {
   let workspaceElement, editor, mainModule, provider, layer, service, consumerDisposable;
 
   // Minimal stand-in for the layer object a renderer passes to `initialize` and
-  // `getItems` (see @lumine-code/marker-host lib/index.js).
+  // `getItems` (see lib/layer.js in the marker package).
   function makeLayer(targetEditor) {
     const fake = {
       editor: targetEditor,
