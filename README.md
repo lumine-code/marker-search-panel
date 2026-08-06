@@ -17,9 +17,9 @@ To install `marker-search-panel` search for _marker-search-panel_ in the Install
 
 ## Customization
 
-The marker style can be adjusted in the `styles.less` file, e.g. change the marker color:
+The marker style can be adjusted in the `styles.css` file, e.g. change the marker color:
 
-```less
+```css
 .marker.marker-search-panel {
   background-color: var(--text-color-info);
 }
