@@ -1,4 +1,4 @@
-const { CompositeDisposable, Emitter } = require("atom");
+const { CompositeDisposable, Emitter } = require("lumine");
 
 describe("marker-search-panel", () => {
   let workspaceElement, editor, mainModule, provider, layer, service, consumerDisposable;
@@ -59,12 +59,12 @@ describe("marker-search-panel", () => {
   }
 
   beforeEach(async () => {
-    workspaceElement = atom.views.getView(atom.workspace);
+    workspaceElement = lumine.views.getView(lumine.workspace);
     jasmine.attachToDOM(workspaceElement);
-    const pack = await atom.packages.activatePackage("marker-search-panel");
+    const pack = await lumine.packages.activatePackage("marker-search-panel");
     mainModule = pack.mainModule;
     provider = mainModule.provideMarkerLayer();
-    editor = await atom.workspace.open();
+    editor = await lumine.workspace.open();
     editor.setText(Array(50).fill("hello world").join("\n"));
     layer = makeLayer(editor);
     service = makeFakeService();
@@ -77,7 +77,7 @@ describe("marker-search-panel", () => {
   });
 
   it("activates and provides a marker layer descriptor", () => {
-    expect(atom.packages.isPackageActive("marker-search-panel")).toBe(true);
+    expect(lumine.packages.isPackageActive("marker-search-panel")).toBe(true);
     expect(provider.name).toBe("search-panel");
     expect(typeof provider.description).toBe("string");
     expect(provider.merge).toBe(true);
@@ -87,8 +87,8 @@ describe("marker-search-panel", () => {
   });
 
   it("matches the shape of the real search.control service", async () => {
-    const activation = atom.packages.activatePackage("search-panel");
-    atom.commands.dispatch(workspaceElement, "search-panel:show");
+    const activation = lumine.packages.activatePackage("search-panel");
+    lumine.commands.dispatch(workspaceElement, "search-panel:show");
     const searchPanel = await activation;
     const realService = searchPanel.mainModule.provideSearchControl();
     expect(typeof realService.resultsMarkerLayerForTextEditor).toBe("function");
@@ -152,7 +152,7 @@ describe("marker-search-panel", () => {
   });
 
   it("clears the markers when the find panel closes and permanent is disabled", () => {
-    atom.config.set("marker-search-panel.permanent", false);
+    lumine.config.set("marker-search-panel.permanent", false);
     markResults([
       [2, 0],
       [2, 5],
@@ -175,7 +175,7 @@ describe("marker-search-panel", () => {
     emitUpdate();
     expect(layer.items.length).toBe(1);
 
-    await atom.workspace.open();
+    await lumine.workspace.open();
     emitUpdate();
     expect(layer.items).toEqual([]);
   });
