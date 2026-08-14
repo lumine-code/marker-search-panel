@@ -13,7 +13,7 @@ A marker layer package for [scrollmap](https://github.com/lumine-code/scrollmap)
 
 ## Installation
 
-To install `marker-search-panel` search for _marker-search-panel_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/marker-search-panel`.
+To install `marker-search-panel` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/marker-search-panel`.
 
 ## Customization
 
@@ -27,8 +27,8 @@ The marker style can be adjusted in the `styles.css` file, e.g. change the marke
 
 ## Services
 
-- **marker.layer** (`1.0.0`): provided to render search result markers as a layer on the editor's overview maps.
-- **search.control** (`^1.0.0`): consumed to observe search updates, panel visibility, and the results marker layer of each editor.
+- `marker.layer`: provided to render search result markers as a layer on the editor's overview maps.
+- `search.control`: consumed to observe search updates, panel visibility, and the results marker layer of each editor.
 
 ## Contributing
 
