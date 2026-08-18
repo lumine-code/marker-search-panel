@@ -1,5 +1,8 @@
 # marker-search-panel
 
+> [!WARNING]
+> **This package is deprecated.** Its marker layer now ships with [search-panel](https://github.com/lumine-code/search-panel) itself — the marker-* adapter packages were folded into their host packages, and this layer's settings moved to `search-panel.marker.*`. This repository is archived and no longer maintained.
+
 Show search results on the scrollbar and minimap.
 
 A marker layer package for [scrollmap](https://github.com/lumine-code/scrollmap) and [minimap](https://github.com/lumine-code/minimap).
